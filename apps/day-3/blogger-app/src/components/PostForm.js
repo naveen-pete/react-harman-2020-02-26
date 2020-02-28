@@ -1,13 +1,25 @@
 import React, { Component } from 'react';
 
-import postService from '../services/PostService';
-
 class PostForm extends Component {
   state = {
+    id: 0,
     title: '',
     body: '',
     author: '',
-    category: ''
+    category: '',
+
+    initialized: false
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.operation === 'Update' && props.post && !state.initialized) {
+      return {
+        ...props.post,
+        initialized: true
+      };
+    }
+
+    return null;
   }
 
   handleChange = e => {
@@ -20,17 +32,17 @@ class PostForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const { title, body, author, category } = this.state;
+    const { id, title, body, author, category } = this.state;
 
     const post = {
+      id,
       title,
       body,
       author,
       category
     };
 
-    postService.create(post);
-    this.props.history.push('/posts');
+    this.props.onSubmit(post);
   }
 
   render() {
@@ -39,7 +51,7 @@ class PostForm extends Component {
     const { title, body, author, category } = this.state;
 
     return <div>
-      <h3 className="mr-3">Post Form</h3>
+      <h3 className="mr-3">{this.props.operation} Post</h3>
 
       <div className="card bg-light">
         <div className="card-body">

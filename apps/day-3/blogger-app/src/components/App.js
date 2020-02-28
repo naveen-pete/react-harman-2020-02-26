@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import Header from './Header';
 import Home from './Home';
 import Posts from './Posts';
-import PostForm from './PostForm';
+import PostFormCreate from './PostFormCreate';
+import PostFormUpdate from './PostFormUpdate';
+import PostDetail from './PostDetail';
+
 import categoryService from '../services/CategoryService';
 
 class App extends Component {
@@ -24,16 +27,25 @@ class App extends Component {
       <div className="container">
         <Header />
 
-        <Route exact path="/" component={Home} />
-        <Route exact path="/posts" render={(props) => {
-          return <Posts categories={categories} {...props} />
-        }} />
-        <Route path="/posts/new"
-          render={(props) => <PostForm categories={categories} {...props} />}
-        />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/posts" render={(props) => {
+            return <Posts categories={categories} {...props} />
+          }} />
+          <Route exact path="/posts/new"
+            render={(props) => <PostFormCreate categories={categories} {...props} />}
+          />
+          <Route exact path="/posts/:id" component={PostDetail} />
+          <Route exact path="/posts/:id/edit"
+            render={(props) => <PostFormUpdate categories={categories} {...props} />}
+          />
+        </Switch>
       </div>
     );
   }
 }
 
 export default App;
+
+// http://localhost:3000/posts/1
+// http://localhost:3000/posts/new

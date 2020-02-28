@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import Categories from './Categories';
-import PostDetail from './PostDetail';
 import { categoryAll } from '../constants';
 import postService from '../services/PostService';
 
@@ -65,8 +65,8 @@ class Posts extends Component {
             <td>{p.category}</td>
             <td>
               <div className="btn-group btn-group-sm">
-                <a className="btn btn-info" href="/">View </a>
-                <a className="btn btn-warning" href="/">Edit</a>
+                <Link className="btn btn-info" to={`/posts/${p.id}`} >View </Link>
+                <Link className="btn btn-warning" to={`/posts/${p.id}/edit`}>Edit</Link>
                 <a className="btn btn-danger" href="/">Delete</a>
               </div>
             </td>
