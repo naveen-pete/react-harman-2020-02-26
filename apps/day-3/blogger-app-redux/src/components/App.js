@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Header from './Header';
 import Home from './Home';
@@ -7,8 +8,7 @@ import Posts from './Posts';
 import PostFormCreate from './PostFormCreate';
 import PostFormUpdate from './PostFormUpdate';
 import PostDetail from './PostDetail';
-
-import categoryService from '../services/CategoryService';
+import { getCategories } from '../actions/categories';
 
 class App extends Component {
   state = {
@@ -16,17 +16,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    categoryService.getAll()
-      .then(categories => this.setState({ categories }))
-      .catch(error => {
-        console.log('Get categories failed.');
-        console.log('Error:', error);
-      });
-    // 
+    this.props.getCategories();
   }
 
   render() {
-    const categories = this.state.categories;
+    const { categories } = this.state;
 
     return (
       <div className="container">
@@ -34,14 +28,20 @@ class App extends Component {
 
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/posts" render={(props) => {
-            return <Posts categories={categories} {...props} />
-          }} />
-          <Route exact path="/posts/new"
+          <Route
+            exact
+            path="/posts"
+            render={(props) => <Posts categories={categories} {...props} />}
+          />
+          <Route
+            exact
+            path="/posts/new"
             render={(props) => <PostFormCreate categories={categories} {...props} />}
           />
           <Route exact path="/posts/:id" component={PostDetail} />
-          <Route exact path="/posts/:id/edit"
+          <Route
+            exact
+            path="/posts/:id/edit"
             render={(props) => <PostFormUpdate categories={categories} {...props} />}
           />
         </Switch>
@@ -50,7 +50,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  getCategories: () => dispatch(getCategories())
+});
 
-// http://localhost:3000/posts/1
-// http://localhost:3000/posts/new
+export default connect(null, mapDispatchToProps)(App);

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class PostForm extends Component {
   state = {
@@ -46,8 +47,7 @@ class PostForm extends Component {
   }
 
   render() {
-    const categories = this.props.categories;
-
+    const { categories } = this.props;
     const { title, body, author, category } = this.state;
 
     return <div>
@@ -127,4 +127,6 @@ class PostForm extends Component {
   }
 }
 
-export default PostForm;
+const mapStateToProps = ({ categories }) => ({ categories });
+
+export default connect(mapStateToProps)(PostForm);

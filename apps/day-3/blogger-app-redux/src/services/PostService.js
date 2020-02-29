@@ -1,8 +1,4 @@
-import { posts } from '../data/store';
-import { apiBaseUrl } from '../constants';
-
 class PostService {
-  // apiUrlPosts = `${apiBaseUrl}/posts`;
   apiUrlPosts = `${process.env.REACT_APP_API_BASE_URL}/posts`;
 
   getAll() {
@@ -38,8 +34,10 @@ class PostService {
   }
 
   delete(id) {
-    const index = posts.findIndex(p => p.id === id);
-    posts.splice(index, 1);
+    return fetch(`${this.apiUrlPosts}/${id}`, {
+      method: 'DELETE'
+    })
+      .then(response => response.json());
   }
 }
 

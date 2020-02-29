@@ -1,7 +1,6 @@
 import { CategoryAction, categoryAll } from '../constants';
 
-const selectedCategoryReducer = (state = categoryAll, action) => {
-
+const categoriesReducer = (state = categoryAll, action) => {
   switch (action.type) {
     case CategoryAction.SELECT_CATEGORY:
       return { ...action.payload };
@@ -9,7 +8,6 @@ const selectedCategoryReducer = (state = categoryAll, action) => {
     default:
       return state;
   }
-
 };
 
-export default selectedCategoryReducer;
+export default categoriesReducer;
