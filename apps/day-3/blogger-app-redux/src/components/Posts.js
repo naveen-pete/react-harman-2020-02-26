@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Categories from './Categories';
 import { categoryAll } from '../constants';
 import postService from '../services/PostService';
+import { getPosts } from '../actions/posts';
+
+import { posts } from '../data/store';
+
+
 
 class Posts extends Component {
   constructor() {
     super();
 
     this.state = {
-      posts: [],
-      selectedCategory: categoryAll
+      // posts: [],
+      // selectedCategory: categoryAll
     };
 
     this.handleCategorySelect = this.handleCategorySelect.bind(this);
@@ -22,31 +28,26 @@ class Posts extends Component {
     this.setState({ selectedCategory });
   }
 
-  async handlePostDelete(id) {
+  handlePostDelete(id) {
     if (window.confirm('Are you sure?')) {
-      try {
-        await postService.delete(id);
-        this.setState((currentState) => {
-          const updatedPosts = currentState.posts.filter(p => p.id !== id);
-          return {
-            posts: updatedPosts
-          };
-        });
-      } catch (e) {
-        console.log('Delete post failed.');
-        console.log('Error:', e);
-      }
+      this.setState((currentState) => {
+        const updatedPosts = currentState.posts.filter(p => p.id !== id);
+        return {
+          posts: updatedPosts
+        };
+      });
     }
   }
 
   async componentDidMount() {
-    try {
-      const posts = await postService.getAll();
-      this.setState({ posts });
-    } catch (e) {
-      console.log('Get posts failed.');
-      console.log('Error:', e);
-    }
+    this.props.getPosts();
+    // try {
+    //   const posts = await postService.getAll();
+    //   this.setState({ posts });
+    // } catch (e) {
+    //   console.log('Get posts failed.');
+    //   console.log('Error:', e);
+    // }
   }
 
   componentWillUnmount() {
@@ -73,7 +74,7 @@ class Posts extends Component {
               <div className="btn-group btn-group-sm">
                 <Link className="btn btn-info" to={`/posts/${p.id}`} >View </Link>
                 <Link className="btn btn-warning" to={`/posts/${p.id}/edit`}>Edit</Link>
-                <button className="btn btn-danger" onClick={() => this.handlePostDelete(p.id)}>Delete</button>
+                <a className="btn btn-danger" href="/">Delete</a>
               </div>
             </td>
           </tr>)}
@@ -83,8 +84,9 @@ class Posts extends Component {
   }
 
   render() {
-    const { categories } = this.props;
-    const { selectedCategory, posts } = this.state;
+    const { categories, selectedCategory, posts } = this.props;
+    // const selectedCategory = this.props.selectedCategory;
+    // const posts = this.state.posts;
 
     const filteredPosts = selectedCategory.id !== 'all'
       ? posts.filter(p => p.category === selectedCategory.id)
@@ -95,7 +97,7 @@ class Posts extends Component {
         <div className="col-3">
           <Categories
             data={categories}
-            onCategorySelect={this.handleCategorySelect}
+          // onCategorySelect={this.handleCategorySelect}
           />
         </div>
 
@@ -113,4 +115,17 @@ class Posts extends Component {
   }
 }
 
-export default Posts;
+const mapStateToProps = appState => {
+  return {
+    posts: appState.posts,
+    selectedCategory: appState.selectedCategory
+  };
+};
+
+const mapDispatchProps = dispatch => {
+  return {
+    getPosts: () => dispatch(getPosts())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchProps)(Posts);

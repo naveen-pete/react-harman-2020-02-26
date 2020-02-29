@@ -34,20 +34,14 @@ class App extends Component {
 
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route
-            exact
-            path="/posts"
-            render={(props) => <Posts categories={categories} {...props} />}
-          />
-          <Route
-            exact
-            path="/posts/new"
+          <Route exact path="/posts" render={(props) => {
+            return <Posts categories={categories} {...props} />
+          }} />
+          <Route exact path="/posts/new"
             render={(props) => <PostFormCreate categories={categories} {...props} />}
           />
           <Route exact path="/posts/:id" component={PostDetail} />
-          <Route
-            exact
-            path="/posts/:id/edit"
+          <Route exact path="/posts/:id/edit"
             render={(props) => <PostFormUpdate categories={categories} {...props} />}
           />
         </Switch>
@@ -57,3 +51,6 @@ class App extends Component {
 }
 
 export default App;
+
+// http://localhost:3000/posts/1
+// http://localhost:3000/posts/new

@@ -1,5 +1,7 @@
+import { apiBaseUrl } from '../constants';
+
 class CategoryService {
-  apiUrlCategories = `${process.env.REACT_APP_API_BASE_URL}/categories`;
+  apiUrlCategories = `${apiBaseUrl}/categories`;
 
   getAll() {
     return fetch(this.apiUrlCategories)

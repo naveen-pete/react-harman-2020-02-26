@@ -18,22 +18,15 @@ class PostDetail extends Component {
     }
   }
 
-  handlePostDelete = async () => {
+  handlePostDelete = () => {
     if (window.confirm('Are you sure?')) {
-      try {
-        await postService.delete(this.state.post.id);
-        this.props.history.push('/posts');
-      }
-      catch (e) {
-        console.log('Delete post failed.');
-        console.log('Error:', e);
-      }
+      postService.delete(this.state.post.id);
+      this.props.history.push('/posts');
     }
   }
 
   render() {
-    const { post } = this.state;
-    const { history } = this.props;
+    const post = this.state.post;
 
     if (!post) {
       return <div>Loading...</div>;
@@ -58,20 +51,16 @@ class PostDetail extends Component {
           </em></p>
         </div>
         <div className="card-footer">
+          <button className="btn btn-sm btn-outline-primary mr-1" type="button">Edit</button>
           <button
-            className="btn btn-sm btn-outline-primary mr-1"
-            type="button"
-            onClick={() => history.push(`/posts/${post.id}/edit`)}
-          >Edit</button>
-          <button
-            className="btn btn-sm btn-outline-danger mr-1"
+            className="btn btn-sm btn-outline-danger"
             type="button"
             onClick={this.handlePostDelete}
           >Delete</button>
           <button
-            className="btn btn-sm btn-outline-info"
+            className="btn btn-sm btn-outline-info ml-1"
             type="button"
-            onClick={() => history.goBack()}
+            onClick={() => this.props.history.goBack()}
           >Back</button>
         </div>
       </div>
