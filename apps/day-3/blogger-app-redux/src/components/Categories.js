@@ -27,10 +27,8 @@ const Categories = (props) => {
   </div>
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    selectCategory: (category) => dispatch(selectCategory(category))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  selectCategory: (category) => dispatch(selectCategory(category))
+});
 
 export default connect(null, mapDispatchToProps)(Categories);
