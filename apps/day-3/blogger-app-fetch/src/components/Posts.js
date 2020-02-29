@@ -49,10 +49,6 @@ class Posts extends Component {
     }
   }
 
-  componentWillUnmount() {
-    console.log('Posts.componentWillUnmount() invoked.');
-  }
-
   renderPosts(posts) {
     return (
       <table className="table table-bordered table-hover">
